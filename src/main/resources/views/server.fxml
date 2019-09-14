@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ServerController">
+   <children>
+      <TextField fx:id="port" editable="false" focusTraversable="false" layoutX="303.0" layoutY="46.0" prefHeight="25.0" prefWidth="192.0" />
+      <TextField fx:id="ipAddress" editable="false" focusTraversable="false" layoutX="303.0" layoutY="96.0" prefHeight="25.0" prefWidth="192.0" />
+      <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="109.0" layoutY="50.0" prefHeight="17.0" prefWidth="185.0" text="Порт" textFill="WHITE" />
+      <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="109.0" layoutY="100.0" prefHeight="17.0" prefWidth="185.0" text="IP адрес" textFill="WHITE" />
+      <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="55.0" layoutY="151.0" prefHeight="17.0" prefWidth="239.0" text="Подключенные клиенты" textFill="WHITE" />
+      <ListView fx:id="clientsList" editable="false" focusTraversable="false" layoutX="303.0" layoutY="150.0" prefHeight="206.0" prefWidth="192.0" />
+   </children>
+</AnchorPane>

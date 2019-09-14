@@ -5,25 +5,25 @@
     -fx-font-size: 12;
 }
 
-.button
-{
-    -fx-background-color: rgb(212,75,56);
-    -fx-background-radius: 25;
-    -fx-border-width: 4;
-    -fx-border-color: rgb(212,75,56);
-    -fx-border-radius: 25;
-    -fx-text-fill: white;
-}
+/*.button*/
+/*{*/
+/*    -fx-background-color: rgb(212,75,56);*/
+/*    -fx-background-radius: 25;*/
+/*    -fx-border-width: 4;*/
+/*    -fx-border-color: rgb(212,75,56);*/
+/*    -fx-border-radius: 25;*/
+/*    -fx-text-fill: white;*/
+/*}*/
 
-.button:hover
-{
-    -fx-background-color: #3a3c3c;
-}
+/*.button:hover*/
+/*{*/
+/*    -fx-background-color: #3a3c3c;*/
+/*}*/
 
-.button:pressed
-{
-    -fx-border-width: 2;
-}
+/*.button:pressed*/
+/*{*/
+/*    -fx-border-width: 2;*/
+/*}*/
 
 .text-field
 {
@@ -32,6 +32,14 @@
 
     -fx-alignment: center;
 }
+
+
+.list-cell
+{
+    -fx-alignment: center;
+}
+
+
 
 
 

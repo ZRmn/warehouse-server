@@ -1,18 +1,11 @@
 package app;
 
-import controllers.HomePageController;
-import dao.UsersDAO;
+import controllers.ServerController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import models.Message;
-import models.User;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-import java.util.List;
 
 public class Main extends Application
 {
@@ -22,45 +15,35 @@ public class Main extends Application
     }
 
     @Override
-    public void start(Stage stage) throws Exception
+    public void start(Stage stage)
     {
         try
         {
-            ApplicationContext context = new ClassPathXmlApplicationContext("/resources/db-config.xml");
+//            FXMLLoader loader = new FXMLLoader();
+//            loader.setLocation(getClass().getResource("/views/server.fxml"));
+//            loader.setController(new ServerController());
+//
+//            Scene scene = new Scene(loader.load());
 
-            UsersDAO usersDAO = context.getBean("usersDAO", UsersDAO.class);
+            DTO dto = DTO.getInstance();
+            dto.getClients().addAll("1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1");
+
+            Scene scene = new Scene(FXMLLoader.load(getClass().getResource("/resources/views/server.fxml")));
 
 
-            List<User> users = usersDAO.getAll();
 
-            for (User user : users)
-            {
-                System.out.print(user.getLogin() + " - (");
+            scene.getStylesheets().add(0, "/resources/styles/style.css");
 
-                for (Message message : user.getMessages())
-                {
-                    System.out.print(message.getId() + ",");
-                }
-
-                System.out.println("\b)");
-            }
+            stage = new Stage();
+            stage.getIcons().add(new Image("/resources/images/gears.png"));
+            stage.setTitle("Server");
+            stage.setResizable(false);
+            stage.setScene(scene);
+            stage.show();
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
-
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/resources/views/HomePage.fxml"));
-        loader.setController(new HomePageController());
-
-        Scene scene = new Scene(loader.load());
-        scene.getStylesheets().add(0, "/resources/styles/style.css");
-
-        stage = new Stage();
-        stage.getIcons().add(new Image("/resources/images/gears.png"));
-        stage.setTitle("Server");
-        stage.setScene(scene);
-        stage.show();
     }
 }

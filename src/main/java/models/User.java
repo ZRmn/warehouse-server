@@ -5,6 +5,12 @@ import java.util.List;
 
 public class User
 {
+    private enum Role
+    {
+        ADMIN,
+        USER
+    }
+
     private Integer id;
     private String login;
     private String password;
@@ -12,6 +18,7 @@ public class User
     private Timestamp registrationDate;
     private Timestamp entryDate;
     private Boolean ban;
+    private Role role;
     private List<Message> messages;
 
     public User()
