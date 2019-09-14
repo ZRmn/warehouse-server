@@ -1,53 +1,43 @@
-//package network;
-//
-//import sample.StageController;
-//import sample.classes.Account;
-//import sample.classes.MetersData;
-//import sample.classes.Tariff;
-//import sample.classes.User;
-//import sample.database.DBHandler;
-//
-//import java.io.DataInputStream;
-//import java.io.DataOutputStream;
-//import java.net.Socket;
-//import java.sql.PreparedStatement;
-//import java.sql.ResultSet;
-//import java.util.ArrayList;
-//import java.util.Calendar;
-//
-//public class ClientThread extends Thread
-//{
-//    private Socket socket;
-//    private StageController stageController;
-//
-//    ClientThread(Socket socket)
-//    {
-//        stageController = StageController.getInstance();
-//        this.socket = socket;
-//    }
-//
-//    @Override
-//    public void run()
-//    {
-//        try
-//        {
-//            DataInputStream in = new DataInputStream(socket.getInputStream());
-//            DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-//            stageController.dbHandler.getDBConnection();
-//            String query[];
-//            String response;
-//
-//            System.out.println("Client connected");
-//            System.out.println("IP: "+ socket.getInetAddress());
-//
-//            while (!socket.isClosed())
-//            {
-//                System.out.println("Waiting for query");
-//                query = in.readUTF().split("/");
-//                System.out.println("Query received: " + query[0]);
-//
-//                switch (query[0])
-//                {
+package network;
+
+import app.DTO;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
+
+public class ClientThread extends Thread
+{
+    private Socket clientSocket;
+    private DTO dto;
+
+    ClientThread(Socket clientSocket)
+    {
+        dto = DTO.getInstance();
+        dto.getClientSockets().add(clientSocket);
+        this.clientSocket = clientSocket;
+    }
+
+    @Override
+    public void run()
+    {
+        try
+        {
+            DataInputStream in = new DataInputStream(clientSocket.getInputStream());
+            DataOutputStream out = new DataOutputStream(clientSocket.getOutputStream());
+            String[] request;
+            String response;
+
+            System.out.println("Client " + clientSocket.getInetAddress() + " connected");
+
+            while (!this.isInterrupted())
+            {
+                request = in.readUTF().split("/");
+                System.out.println("Received request from " + clientSocket.getInetAddress() + ": " + request[0]);
+
+                switch (request[0])
+                {
 //                    case "sendUsersTable":
 //                    {
 //                        ArrayList<User> users = new ArrayList<User>();
@@ -78,10 +68,10 @@
 //
 //                    case "signUp":
 //                    {
-//                        User user = JSONParser.objectFromJson(query[1], User.class);
+//                        User user = JSONParser.objectFromJson(request[1], User.class);
 //                        ResultSet rs = stageController.dbHandler.select(new String[]{"*"}, new String[]{"users"}, new String[]{"login"}, new String[]{"="}, new Object[]{user.getLogin()}, null);
 //
-//                        response = "true";
+//                        response = "success";
 //
 //                        try
 //                        {
@@ -103,15 +93,14 @@
 //
 //                    case "signIn":
 //                    {
-//                        User user = JSONParser.objectFromJson(query[1], User.class);
+//                        User user = JSONParser.objectFromJson(request[1], User.class);
 //                        ResultSet rs = stageController.dbHandler.select(new String[]{"*"}, new String[]{"users"}, new String[]{"login", "password"}, new String[]{"=", "="}, new Object[]{user.getLogin(), user.getPassword()}, new String[]{"AND"});
-//                        int flag = 0;
-//                        String post = "";
+//                        response = "failed"
 //                        try
 //                        {
 //                            while (rs.next())
 //                            {
-//                                post = rs.getString("post");
+//                                response = rs.getString("post");
 //                                flag++;
 //                            }
 //                        }
@@ -120,14 +109,6 @@
 //                            System.out.println(ex);
 //                        }
 //
-//                        if(flag > 0)
-//                        {
-//                            response = post;
-//                        }
-//                        else
-//                        {
-//                            response = "false";
-//                        }
 //
 //                        out.writeUTF(response);
 //                        out.flush();
@@ -137,7 +118,7 @@
 //
 //                    case "insertUser":
 //                    {
-//                        User user = JSONParser.objectFromJson(query[1], User.class);
+//                        User user = JSONParser.objectFromJson(request[1], User.class);
 //
 //                        stageController.dbHandler.insert(new String[]{"users"}, new String[]{"idusers", "login", "password", "fio", "post"}, new Object[]{user.getId(), user.getLogin(), user.getPassword(), user.getFio(), user.getPost()});
 //
@@ -146,7 +127,7 @@
 //
 //                    case "updateUsersTable":
 //                    {
-//                        User[] users = JSONParser.objectFromJson(query[1], User[].class);
+//                        User[] users = JSONParser.objectFromJson(request[1], User[].class);
 //
 //                        stageController.dbHandler.delete(new String[]{"users"}, new String[]{"*"}, null, null, null);
 //
@@ -205,7 +186,7 @@
 //
 //                    case "updateAccountsTable":
 //                    {
-//                        Account[] accounts = JSONParser.objectFromJson(query[1], Account[].class);
+//                        Account[] accounts = JSONParser.objectFromJson(request[1], Account[].class);
 //
 //                        stageController.dbHandler.delete(new String[]{"accounts"}, new String[]{"*"}, null, null, null);
 //
@@ -218,88 +199,25 @@
 //                        break;
 //                    }
 //
-//                    case "calculateCost":
-//                    {
-//                        MetersData metersData = JSONParser.objectFromJson(query[1], MetersData.class);
-//                        ResultSet rs;
-//                        PreparedStatement ps = stageController.dbHandler.getDBConnection().prepareStatement("SELECT * FROM tariff");
-//
-//                        rs = ps.executeQuery();
-//
-//                        try
-//                        {
-//                            rs.next();
-//                            Tariff tariff = new Tariff(rs.getDouble("coldWaterCost"), rs.getDouble("hotWaterCost"), rs.getDouble("heatingCost"), rs.getDouble("electricityCost"), rs.getDouble("gasCost"));
-//                            response = JSONParser.jsonFromObject(tariff.calculateCost(metersData));
-//
-//                            out.writeUTF(response);
-//                            out.flush();
-//
-//                        }
-//                        catch (Exception ex)
-//                        {
-//                            System.out.println(ex);
-//                        }
-//
-//                        break;
-//                    }
-//
-//                    case "sendTariff":
-//                    {
-//                        ResultSet rs;
-//                        PreparedStatement ps = stageController.dbHandler.getDBConnection().prepareStatement("SELECT * FROM tariff");
-//                        rs = ps.executeQuery();
-//
-//                        try
-//                        {
-//                            rs.next();
-//                            response = JSONParser.jsonFromObject(new Tariff(rs.getDouble("coldWaterCost"), rs.getDouble("hotWaterCost"), rs.getDouble("heatingCost"), rs.getDouble("electricityCost"), rs.getDouble("gasCost")));
-//
-//                            out.writeUTF(response);
-//                            out.flush();
-//
-//                        }
-//                        catch (Exception ex)
-//                        {
-//                            System.out.println(ex);
-//                        }
-//
-//                        break;
-//                    }
-//
-//                    case "updateTariff":
-//                    {
-//                        Tariff tariff = JSONParser.objectFromJson(query[1], Tariff.class);
-//
-//                        PreparedStatement ps = stageController.dbHandler.getDBConnection().prepareStatement("DELETE FROM tariff");
-//                        ps.executeUpdate();
-//                        ps = stageController.dbHandler.getDBConnection().prepareStatement("INSERT INTO tariff(coldWaterCost, hotWaterCost, heatingCost, electricityCost, gasCost) VALUES(?,?,?,?,?)");
-//                        ps.setDouble(1,tariff.getColdWaterCost());
-//                        ps.setDouble(2,tariff.getHotWaterCost());
-//                        ps.setDouble(3,tariff.getHeatingCost());
-//                        ps.setDouble(4,tariff.getElectricityCost());
-//                        ps.setDouble(5,tariff.getGasCost());
-//
-//                        ps.executeUpdate();
-//
-//                        break;
-//                    }
-//
-//                    case "exit":
-//                    {
-//                        System.out.println("Client disconnected");
-//                        System.out.println("IP:"+ socket.getInetAddress());
-//                        stageController.numberOfConnections--;
-//                        socket.close();
-//                        Thread.interrupted();
-//                    }
-//                }
-//
-//            }
-//        }
-//        catch (Exception ex)
-//        {
-//            System.out.println(ex);
-//        }
-//    }
-//}
+
+
+                    case "disconnect":
+                    {
+                        System.out.println("Client " + clientSocket.getInetAddress() + " disconnected");
+
+                        dto.getClientSockets().remove(clientSocket);
+
+                        clientSocket.close();
+
+                        this.interrupt();
+                    }
+                }
+            }
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+    }
+}

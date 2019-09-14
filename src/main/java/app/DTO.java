@@ -7,15 +7,19 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.List;
+
 
 public class DTO
 {
     private UsersDAO usersDAO;
-    private boolean isConnected;
-    private int port;
-    private String ipAddress;
+    private Integer port;
+    private String ip;
     private ObservableList<String> clients;
+    private List<Socket> clientSockets;
 
     private static DTO dto;
 
@@ -34,20 +38,19 @@ public class DTO
 
     private DTO()
     {
-        ApplicationContext context = new ClassPathXmlApplicationContext("/resources/db-config.xml");
+        ApplicationContext context = new ClassPathXmlApplicationContext("/resources/server-config.xml");
         usersDAO = context.getBean("usersDAO", UsersDAO.class);
-
-        isConnected = false;
-        port = 4815;
+        port = context.getBean("port", Integer.class);
         clients = FXCollections.observableArrayList();
+        clientSockets = new ArrayList<>();
 
         try
         {
-            ipAddress = InetAddress.getLocalHost().getHostAddress();
+            ip = InetAddress.getLocalHost().getHostAddress();
         }
-        catch (Exception ex)
+        catch (UnknownHostException e)
         {
-            System.out.println(ex);
+            e.printStackTrace();
         }
     }
 
@@ -61,16 +64,6 @@ public class DTO
         this.usersDAO = usersDAO;
     }
 
-    public boolean isConnected()
-    {
-        return isConnected;
-    }
-
-    public void setConnected(boolean connected)
-    {
-        isConnected = connected;
-    }
-
     public int getPort()
     {
         return port;
@@ -81,14 +74,14 @@ public class DTO
         this.port = port;
     }
 
-    public String getIpAddress()
+    public String getIp()
     {
-        return ipAddress;
+        return ip;
     }
 
-    public void setIpAddress(String ipAddress)
+    public void setIp(String ip)
     {
-        this.ipAddress = ipAddress;
+        this.ip = ip;
     }
 
     public ObservableList<String> getClients()
@@ -99,5 +92,15 @@ public class DTO
     public void setClients(ObservableList<String> clients)
     {
         this.clients = clients;
+    }
+
+    public List<Socket> getClientSockets()
+    {
+        return clientSockets;
+    }
+
+    public void setClientSockets(List<Socket> clientSockets)
+    {
+        this.clientSockets = clientSockets;
     }
 }

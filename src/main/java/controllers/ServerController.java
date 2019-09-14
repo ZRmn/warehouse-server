@@ -21,7 +21,7 @@ public class ServerController
     {
         dto = DTO.getInstance();
         port.setText(Integer.toString(dto.getPort()));
-        ipAddress.setText(dto.getIpAddress());
+        ipAddress.setText(dto.getIp());
         clientsList.setItems(dto.getClients());
     }
 }

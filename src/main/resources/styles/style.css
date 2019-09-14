@@ -25,19 +25,48 @@
 /*    -fx-border-width: 2;*/
 /*}*/
 
+.label
+{
+    -fx-text-alignment: right;
+    -fx-text-fill: white;
+}
+
 .text-field
 {
     -fx-border-radius: 25;
     -fx-background-radius: 25;
-
+    -fx-background-color: #5e6060;
     -fx-alignment: center;
+    -fx-text-fill: white;
 }
 
+.list-view
+{
+    -fx-background-color: #5e6060;
+    -fx-color-label-visible: black;
+}
 
 .list-cell
 {
+    -fx-background-color: #5e6060;
     -fx-alignment: center;
+    -fx-text-fill: white;
+    -fx-background-radius: 25;
+    -fx-border-radius: 25;
 }
+
+.list-cell:selected
+{
+    -fx-background-color: #9ea1a1;
+}
+
+.scroll-bar
+{
+    -fx-background-color: #5e6060;
+}
+
+
+
 
 
 

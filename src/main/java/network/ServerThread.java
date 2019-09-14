@@ -1,48 +1,40 @@
-//package network;
-//
-//import sample.StageController;
-//
-//import java.net.ServerSocket;
-//
-//public class ServerThread extends Thread
-//{
-//    StageController stageController = StageController.getInstance();
-//
-//    @Override
-//    public void run()
-//    {
-//        try
-//        {
-//            ServerSocket serverSocket = new ServerSocket(stageController.port);
-//
-//            System.out.println("Waiting for file choosing");
-//
-//            while (true)
-//            {
-//                Thread.sleep(5000);
-//
-//                if(stageController.isConnected)
-//                {
-//                    break;
-//                }
-//            }
-//
-//            System.out.println("File choosed");
-//
-//            Thread clientThread;
-//
-//            while (true)
-//            {
-//                System.out.println("Waiting for client");
-//                clientThread = new Thread(new ClientThread(serverSocket.accept()));
-//                clientThread.setDaemon(true);
-//                clientThread.start();
-//                stageController.numberOfConnections++;
-//            }
-//        }
-//        catch (Exception ex)
-//        {
-//            System.out.println(ex);
-//        }
-//    }
-//}
+package network;
+
+import app.DTO;
+
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+public class ServerThread extends Thread
+{
+    private DTO dto;
+
+    @Override
+    public void run()
+    {
+        try
+        {
+            dto = DTO.getInstance();
+            ServerSocket serverSocket = new ServerSocket(dto.getPort());
+
+            System.out.println("Server running");
+
+            while (!this.isInterrupted())
+            {
+                System.out.println("Waiting for client");
+
+                Socket clientSocket = serverSocket.accept();
+                Thread clientThread = new ClientThread(clientSocket);
+                clientThread.setDaemon(true);
+                clientThread.setName("Client " + clientSocket.getInetAddress() + " Thread");
+                clientThread.start();
+            }
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+    }
+}
