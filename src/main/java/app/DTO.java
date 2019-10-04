@@ -9,17 +9,13 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.List;
-
 
 public class DTO
 {
     private UsersDAO usersDAO;
     private Integer port;
     private String ip;
-    private ObservableList<String> clients;
-    private List<Socket> clientSockets;
+    private ObservableList<Socket> clients;
 
     private static DTO dto;
 
@@ -42,7 +38,6 @@ public class DTO
         usersDAO = context.getBean("usersDAO", UsersDAO.class);
         port = context.getBean("port", Integer.class);
         clients = FXCollections.observableArrayList();
-        clientSockets = new ArrayList<>();
 
         try
         {
@@ -64,16 +59,6 @@ public class DTO
         this.usersDAO = usersDAO;
     }
 
-    public int getPort()
-    {
-        return port;
-    }
-
-    public void setPort(int port)
-    {
-        this.port = port;
-    }
-
     public String getIp()
     {
         return ip;
@@ -84,23 +69,23 @@ public class DTO
         this.ip = ip;
     }
 
-    public ObservableList<String> getClients()
+    public ObservableList<Socket> getClients()
     {
         return clients;
     }
 
-    public void setClients(ObservableList<String> clients)
+    public void setClients(ObservableList<Socket> clients)
     {
         this.clients = clients;
     }
 
-    public List<Socket> getClientSockets()
+    public Integer getPort()
     {
-        return clientSockets;
+        return port;
     }
 
-    public void setClientSockets(List<Socket> clientSockets)
+    public void setPort(Integer port)
     {
-        this.clientSockets = clientSockets;
+        this.port = port;
     }
 }

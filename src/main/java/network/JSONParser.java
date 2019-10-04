@@ -2,7 +2,6 @@ package network;
 
 import com.google.gson.Gson;
 
-
 public class JSONParser
 {
     public static String jsonFromObject(Object obj)

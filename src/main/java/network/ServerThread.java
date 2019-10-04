@@ -22,12 +22,9 @@ public class ServerThread extends Thread
 
             while (!this.isInterrupted())
             {
-                System.out.println("Waiting for client");
-
                 Socket clientSocket = serverSocket.accept();
                 Thread clientThread = new ClientThread(clientSocket);
                 clientThread.setDaemon(true);
-                clientThread.setName("Client " + clientSocket.getInetAddress() + " Thread");
                 clientThread.start();
             }
         }
@@ -35,6 +32,5 @@ public class ServerThread extends Thread
         {
             e.printStackTrace();
         }
-
     }
 }

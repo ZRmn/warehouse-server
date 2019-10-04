@@ -2,8 +2,10 @@ package controllers;
 
 import app.DTO;
 import javafx.fxml.FXML;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.util.Callback;
+
+import java.net.Socket;
 
 public class ServerController
 {
@@ -12,7 +14,7 @@ public class ServerController
     @FXML
     private TextField ipAddress;
     @FXML
-    private ListView<String> clientsList;
+    private ListView<Socket> clients;
 
     private DTO dto;
 
@@ -22,7 +24,35 @@ public class ServerController
         dto = DTO.getInstance();
         port.setText(Integer.toString(dto.getPort()));
         ipAddress.setText(dto.getIp());
-        clientsList.setItems(dto.getClients());
+
+        clients.setCellFactory(new Callback<ListView<Socket>, ListCell<Socket>>()
+        {
+            @Override
+            public ListCell<Socket> call(ListView<Socket> socketListView)
+            {
+                return new ListCell<Socket>()
+                {
+                    @Override
+                    protected void updateItem(Socket socket, boolean b)
+                    {
+                        super.updateItem(socket, b);
+
+                        setGraphic(null);
+
+                        if ((b == true) || (socket == null))
+                        {
+                            setText(null);
+                        }
+                        else
+                        {
+                            setText(socket.getInetAddress().getHostAddress());
+                        }
+                    }
+                };
+            }
+        });
+
+        clients.setItems(dto.getClients());
     }
 }
 

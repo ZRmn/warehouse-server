@@ -15,7 +15,7 @@ public class ClientThread extends Thread
     ClientThread(Socket clientSocket)
     {
         dto = DTO.getInstance();
-        dto.getClientSockets().add(clientSocket);
+        dto.getClients().add(clientSocket);
         this.clientSocket = clientSocket;
     }
 
@@ -29,12 +29,12 @@ public class ClientThread extends Thread
             String[] request;
             String response;
 
-            System.out.println("Client " + clientSocket.getInetAddress() + " connected");
+            System.out.println("Client " + clientSocket.getInetAddress().getHostAddress() + " connected");
 
             while (!this.isInterrupted())
             {
                 request = in.readUTF().split("/");
-                System.out.println("Received request from " + clientSocket.getInetAddress() + ": " + request[0]);
+                System.out.println("Received request from " + clientSocket.getInetAddress().getHostAddress() + ": " + request[0]);
 
                 switch (request[0])
                 {
@@ -203,9 +203,9 @@ public class ClientThread extends Thread
 
                     case "disconnect":
                     {
-                        System.out.println("Client " + clientSocket.getInetAddress() + " disconnected");
+                        System.out.println("Client " + clientSocket.getInetAddress().getHostAddress() + " disconnected");
 
-                        dto.getClientSockets().remove(clientSocket);
+                        dto.getClients().remove(clientSocket);
 
                         clientSocket.close();
 
@@ -218,6 +218,5 @@ public class ClientThread extends Thread
         {
             e.printStackTrace();
         }
-
     }
 }
