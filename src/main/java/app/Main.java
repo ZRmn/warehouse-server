@@ -9,9 +9,7 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import network.ServerThread;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.Socket;
 
 public class Main extends Application
 {
