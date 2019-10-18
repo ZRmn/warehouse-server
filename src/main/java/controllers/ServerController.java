@@ -33,19 +33,18 @@ public class ServerController
                 return new ListCell<Socket>()
                 {
                     @Override
-                    protected void updateItem(Socket socket, boolean b)
+                    protected void updateItem(Socket item, boolean empty)
                     {
-                        super.updateItem(socket, b);
+                        super.updateItem(item, empty);
 
-                        setGraphic(null);
-
-                        if ((b == true) || (socket == null))
+                        if (empty || item == null)
                         {
                             setText(null);
+                            setGraphic(null);
                         }
                         else
                         {
-                            setText(socket.getInetAddress().getHostAddress());
+                            setText(item.getInetAddress().getHostAddress());
                         }
                     }
                 };

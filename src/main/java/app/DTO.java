@@ -3,8 +3,10 @@ package app;
 import dao.UsersDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Component;
 
 import java.net.InetAddress;
 import java.net.Socket;
@@ -12,7 +14,9 @@ import java.net.UnknownHostException;
 
 public class DTO
 {
+    @Autowired
     private UsersDAO usersDAO;
+
     private Integer port;
     private String ip;
     private ObservableList<Socket> clients;

@@ -205,9 +205,9 @@ public class ClientThread extends Thread
                     {
                         System.out.println("Client " + clientSocket.getInetAddress().getHostAddress() + " disconnected");
 
-                        dto.getClients().remove(clientSocket);
-
                         clientSocket.close();
+
+                        dto.getClients().remove(clientSocket);
 
                         this.interrupt();
                     }
