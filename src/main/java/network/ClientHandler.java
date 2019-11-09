@@ -7,16 +7,21 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
-public class ClientThread extends Thread
+public class ClientHandler implements Runnable
 {
-    private Socket clientSocket;
+    private Socket socket;
     private DTO dto;
 
-    ClientThread(Socket clientSocket)
+    ClientHandler(Socket socket)
     {
         dto = DTO.getInstance();
-        dto.getClients().add(clientSocket);
-        this.clientSocket = clientSocket;
+        dto.getClients().add(socket);
+        this.socket = socket;
+    }
+
+    public Socket getSocket()
+    {
+        return socket;
     }
 
     @Override
@@ -24,17 +29,17 @@ public class ClientThread extends Thread
     {
         try
         {
-            DataInputStream in = new DataInputStream(clientSocket.getInputStream());
-            DataOutputStream out = new DataOutputStream(clientSocket.getOutputStream());
+            DataInputStream in = new DataInputStream(socket.getInputStream());
+            DataOutputStream out = new DataOutputStream(socket.getOutputStream());
             String[] request;
             String response;
 
-            System.out.println("Client " + clientSocket.getInetAddress().getHostAddress() + " connected");
+            System.out.println("Client " + socket.getInetAddress().getHostAddress() + " connected");
 
-            while (!this.isInterrupted())
+            while (true)
             {
                 request = in.readUTF().split("/");
-                System.out.println("Received request from " + clientSocket.getInetAddress().getHostAddress() + ": " + request[0]);
+                System.out.println("Received request from " + socket.getInetAddress().getHostAddress() + ": " + request[0]);
 
                 switch (request[0])
                 {
@@ -203,13 +208,11 @@ public class ClientThread extends Thread
 
                     case "disconnect":
                     {
-                        System.out.println("Client " + clientSocket.getInetAddress().getHostAddress() + " disconnected");
+                        System.out.println("Client " + socket.getInetAddress().getHostAddress() + " disconnected");
+                        dto.getClients().remove(socket);
+                        socket.close();
 
-                        clientSocket.close();
-
-                        dto.getClients().remove(clientSocket);
-
-                        this.interrupt();
+                        return;
                     }
                 }
             }

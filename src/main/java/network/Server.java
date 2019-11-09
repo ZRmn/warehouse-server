@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class ServerThread extends Thread
+public class Server implements Runnable
 {
     private DTO dto;
 
@@ -20,10 +20,10 @@ public class ServerThread extends Thread
 
             System.out.println("Server running");
 
-            while (!this.isInterrupted())
+            while (true)
             {
                 Socket clientSocket = serverSocket.accept();
-                Thread clientThread = new ClientThread(clientSocket);
+                Thread clientThread = new Thread(new ClientHandler(clientSocket));
                 clientThread.setDaemon(true);
                 clientThread.start();
             }
