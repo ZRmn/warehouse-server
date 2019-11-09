@@ -1,8 +1,8 @@
-package network;
+package utils;
 
 import com.google.gson.Gson;
 
-public class JSONParser
+public class JsonParser
 {
     public static String jsonFromObject(Object obj)
     {

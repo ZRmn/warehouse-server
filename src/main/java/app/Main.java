@@ -7,10 +7,10 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 
 import javafx.stage.Stage;
-import network.Server;
-import utils.MD5;
+import network.TcpServer;
 
 import java.io.IOException;
+
 public class Main extends Application
 {
     public static void main(String[] args)
@@ -21,12 +21,9 @@ public class Main extends Application
     @Override
     public void start(Stage stage)
     {
-        Thread serverThread = new Thread(new Server());
+        Thread serverThread = new Thread(new TcpServer());
         serverThread.setDaemon(true);
         serverThread.start();
-
-        System.out.println(MD5.encode("ZRmn4815162342"));
-
 
         try
         {

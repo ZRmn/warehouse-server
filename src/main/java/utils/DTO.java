@@ -1,25 +1,17 @@
-package app;
+package utils;
 
 import dao.UsersDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import org.springframework.beans.factory.annotation.Autowired;
+import network.Client;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.stereotype.Component;
-
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
 
 public class DTO
 {
-    @Autowired
     private UsersDAO usersDAO;
-
     private Integer port;
-    private String ip;
-    private ObservableList<Socket> clients;
+    private ObservableList<Client> clients;
 
     private static DTO dto;
 
@@ -42,15 +34,6 @@ public class DTO
         usersDAO = context.getBean("usersDAO", UsersDAO.class);
         port = context.getBean("port", Integer.class);
         clients = FXCollections.observableArrayList();
-
-        try
-        {
-            ip = InetAddress.getLocalHost().getHostAddress();
-        }
-        catch (UnknownHostException e)
-        {
-            e.printStackTrace();
-        }
     }
 
     public UsersDAO getUsersDAO()
@@ -63,22 +46,12 @@ public class DTO
         this.usersDAO = usersDAO;
     }
 
-    public String getIp()
-    {
-        return ip;
-    }
-
-    public void setIp(String ip)
-    {
-        this.ip = ip;
-    }
-
-    public ObservableList<Socket> getClients()
+    public ObservableList<Client> getClients()
     {
         return clients;
     }
 
-    public void setClients(ObservableList<Socket> clients)
+    public void setClients(ObservableList<Client> clients)
     {
         this.clients = clients;
     }
