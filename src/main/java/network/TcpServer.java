@@ -1,8 +1,6 @@
 package network;
 
 import utils.DTO;
-
-import java.io.IOException;
 import java.net.ServerSocket;
 
 public class TcpServer implements Runnable
@@ -28,10 +26,9 @@ public class TcpServer implements Runnable
             {
                 Client client = new Client(serverSocket.accept());
                 client.startProcessing();
-                dto.getClients().add(client);
             }
         }
-        catch (IOException e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }

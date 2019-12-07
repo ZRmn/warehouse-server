@@ -12,22 +12,19 @@ public class ServerController
     @FXML
     private TextField port;
     @FXML
-    private TextField ipAddress;
+    private TextField host;
     @FXML
     private ListView<Client> clients;
-
-    private DTO dto;
 
     @FXML
     void initialize()
     {
-        dto = DTO.getInstance();
-        port.setText(Integer.toString(dto.getPort()));
-        clients.setItems(dto.getClients());
+        port.setText(Integer.toString(DTO.getInstance().getPort()));
+        clients.setItems(DTO.getInstance().getClients());
 
         try
         {
-            ipAddress.setText(InetAddress.getLocalHost().getHostAddress());
+            host.setText(InetAddress.getLocalHost().getHostAddress());
         }
         catch (UnknownHostException e)
         {

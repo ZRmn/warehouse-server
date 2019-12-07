@@ -2,7 +2,7 @@ package utils;
 
 public class IdSeeker
 {
-    public static Integer find(int[] ids)
+    public static Integer find(Integer[] ids)
     {
         if (ids.length > 0)
         {

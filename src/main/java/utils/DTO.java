@@ -1,6 +1,6 @@
 package utils;
 
-import dao.UsersDAO;
+import dao.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import network.Client;
@@ -9,7 +9,11 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class DTO
 {
-    private UsersDAO usersDAO;
+    private UserDAO userDAO;
+    private PlaceDAO placeDAO;
+    private BoxDAO boxDAO;
+    private ProductDAO productDAO;
+    private OrderDAO orderDAO;
     private Integer port;
     private ObservableList<Client> clients;
 
@@ -31,19 +35,63 @@ public class DTO
     private DTO()
     {
         ApplicationContext context = new ClassPathXmlApplicationContext("/resources/server-config.xml");
-        usersDAO = context.getBean("usersDAO", UsersDAO.class);
+        userDAO = context.getBean("userDAO", UserDAO.class);
+        placeDAO = context.getBean("placeDAO", PlaceDAO.class);
+        boxDAO = context.getBean("boxDAO", BoxDAO.class);
+        productDAO = context.getBean("productDAO", ProductDAO.class);
+        orderDAO = context.getBean("orderDAO", OrderDAO.class);
         port = context.getBean("port", Integer.class);
         clients = FXCollections.observableArrayList();
     }
 
-    public UsersDAO getUsersDAO()
+    public UserDAO getUserDAO()
     {
-        return usersDAO;
+        return userDAO;
     }
 
-    public void setUsersDAO(UsersDAO usersDAO)
+    public void setUserDAO(UserDAO userDAO)
     {
-        this.usersDAO = usersDAO;
+        this.userDAO = userDAO;
+    }
+
+    public PlaceDAO getPlaceDAO()
+    {
+        return placeDAO;
+    }
+
+    public void setPlaceDAO(PlaceDAO placeDAO)
+    {
+        this.placeDAO = placeDAO;
+    }
+
+    public BoxDAO getBoxDAO()
+    {
+        return boxDAO;
+    }
+
+    public void setBoxDAO(BoxDAO boxDAO)
+    {
+        this.boxDAO = boxDAO;
+    }
+
+    public ProductDAO getProductDAO()
+    {
+        return productDAO;
+    }
+
+    public void setProductDAO(ProductDAO productDAO)
+    {
+        this.productDAO = productDAO;
+    }
+
+    public OrderDAO getOrderDAO()
+    {
+        return orderDAO;
+    }
+
+    public void setOrderDAO(OrderDAO orderDAO)
+    {
+        this.orderDAO = orderDAO;
     }
 
     public ObservableList<Client> getClients()

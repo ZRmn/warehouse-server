@@ -1,11 +1,7 @@
 package network;
 
-import javafx.application.Platform;
-import utils.DTO;
-
 import java.io.IOException;
 import java.net.Socket;
-import java.util.Objects;
 
 public class Client
 {
@@ -13,13 +9,10 @@ public class Client
     private String info;
     private ClientHandler handler;
 
-    private boolean handles;
-
     public Client(Socket socket)
     {
         this.socket = socket;
         this.handler = new ClientHandler(this);
-        this.handles = false;
     }
 
     public Socket getSocket()
@@ -45,35 +38,22 @@ public class Client
 
     public void startProcessing()
     {
-        if (!handles)
-        {
-            handles = true;
-
-            Thread clientThread = new Thread(handler);
-            clientThread.setDaemon(true);
-            clientThread.start();
-        }
+        Thread clientThread = new Thread(handler);
+        clientThread.setDaemon(true);
+        clientThread.start();
     }
 
     public void disconnect()
     {
-        if (handles)
+        try
         {
-            Platform.runLater(() ->
-            {
-                DTO.getInstance().getClients().remove(this);
-
-                try
-                {
-                    socket.close();
-                }
-                catch (IOException e)
-                {
-                    e.printStackTrace();
-                }
-            });
-
-            handler.shutdown();
+            socket.close();
         }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+        handler.shutdown();
     }
 }

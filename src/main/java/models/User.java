@@ -1,43 +1,30 @@
 package models;
 
-import java.sql.Timestamp;
-import java.util.List;
-
-public class User
+public abstract class User
 {
-    private enum Role
-    {
-        ADMIN,
-        USER
-    }
+    protected Integer id;
+    protected String login;
+    protected String password;
+    protected String fullName;
 
-    private Integer id;
-    private String login;
-    private String password;
-    private String email;
-    private Timestamp registrationDate;
-    private Timestamp entryDate;
-    private Boolean ban;
-    private Role role;
-    private List<Message> messages;
-
-    public User()
+    protected User()
     {
 
     }
 
+    protected User(String login, String password, String fullName)
+    {
+        this.login = login;
+        this.password = password;
+        this.fullName = fullName;
+    }
 
-    public User(Integer id, String login, String password, String email, Timestamp registrationDate,
-                Timestamp entryDate, Boolean ban, List<Message> messages)
+    protected User(Integer id, String login, String password, String fullName)
     {
         this.id = id;
         this.login = login;
         this.password = password;
-        this.email = email;
-        this.registrationDate = registrationDate;
-        this.entryDate = entryDate;
-        this.ban = ban;
-        this.messages = messages;
+        this.fullName = fullName;
     }
 
     public Integer getId()
@@ -70,53 +57,13 @@ public class User
         this.password = password;
     }
 
-    public String getEmail()
+    public String getFullName()
     {
-        return email;
+        return fullName;
     }
 
-    public void setEmail(String email)
+    public void setFullName(String fullName)
     {
-        this.email = email;
-    }
-
-    public Timestamp getRegistrationDate()
-    {
-        return registrationDate;
-    }
-
-    public void setRegistrationDate(Timestamp registrationDate)
-    {
-        this.registrationDate = registrationDate;
-    }
-
-    public Timestamp getEntryDate()
-    {
-        return entryDate;
-    }
-
-    public void setEntryDate(Timestamp entryDate)
-    {
-        this.entryDate = entryDate;
-    }
-
-    public Boolean getBan()
-    {
-        return ban;
-    }
-
-    public void setBan(Boolean ban)
-    {
-        this.ban = ban;
-    }
-
-    public List<Message> getMessages()
-    {
-        return messages;
-    }
-
-    public void setMessages(List<Message> messages)
-    {
-        this.messages = messages;
+        this.fullName = fullName;
     }
 }
