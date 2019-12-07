@@ -14,6 +14,8 @@ public class DTO
     private BoxDAO boxDAO;
     private ProductDAO productDAO;
     private OrderDAO orderDAO;
+    private AddressDAO addressDAO;
+    private WarehouseMapDAO warehouseMapDAO;
     private Integer port;
     private ObservableList<Client> clients;
 
@@ -40,6 +42,8 @@ public class DTO
         boxDAO = context.getBean("boxDAO", BoxDAO.class);
         productDAO = context.getBean("productDAO", ProductDAO.class);
         orderDAO = context.getBean("orderDAO", OrderDAO.class);
+        addressDAO = context.getBean("addressDAO", AddressDAO.class);
+        warehouseMapDAO = context.getBean("warehouseMapDAO", WarehouseMapDAO.class);
         port = context.getBean("port", Integer.class);
         clients = FXCollections.observableArrayList();
     }
@@ -92,6 +96,26 @@ public class DTO
     public void setOrderDAO(OrderDAO orderDAO)
     {
         this.orderDAO = orderDAO;
+    }
+
+    public AddressDAO getAddressDAO()
+    {
+        return addressDAO;
+    }
+
+    public void setAddressDAO(AddressDAO addressDAO)
+    {
+        this.addressDAO = addressDAO;
+    }
+
+    public WarehouseMapDAO getWarehouseMapDAO()
+    {
+        return warehouseMapDAO;
+    }
+
+    public void setWarehouseMapDAO(WarehouseMapDAO warehouseMapDAO)
+    {
+        this.warehouseMapDAO = warehouseMapDAO;
     }
 
     public ObservableList<Client> getClients()

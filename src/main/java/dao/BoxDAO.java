@@ -40,7 +40,7 @@ public class BoxDAO implements CrudDAO<Box>
     public void create(Box model)
     {
         String query = "INSERT INTO warehouse.box (id, products_count, product_id) VALUES(?, ?, ?)";
-        Object[] args = {findId(), model.getCount(), model.getProduct() != null, model.getProduct() != null ? model.getProduct().getId() : null};
+        Object[] args = {findId(), model.getCount(), model.getProduct() != null ? model.getProduct().getId() : null};
         int[] types = {Types.INTEGER, Types.INTEGER, Types.INTEGER};
 
         template.update(query, args, types);

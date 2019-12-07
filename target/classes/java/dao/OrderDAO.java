@@ -1,9 +1,6 @@
 package dao;
 
-import models.Item;
-import models.Order;
-import models.Box;
-import models.Product;
+import models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -26,9 +23,10 @@ public class OrderDAO implements CrudDAO<Order>
 
         if (!ordersMap.containsKey(orderId))
         {
+            Integer addressId = resultSet.getInt("addressId");
             String address = resultSet.getString("address");
 
-            Order order = new Order(orderId, address, new ArrayList<>());
+            Order order = new Order(orderId, new Address(addressId, address), new ArrayList<>());
 
             ordersMap.put(orderId, order);
         }
@@ -39,12 +37,12 @@ public class OrderDAO implements CrudDAO<Order>
         Integer productId = resultSet.getInt("productId");
         Long code = resultSet.getLong("code");
         String description = resultSet.getString("description");
-        Integer boxesCount = resultSet.getInt("boxes_count");
+        Integer count = resultSet.getInt("boxes_count");
 
         Product product = new Product(productId, code, description);
         Box box = new Box(boxId, productsCount, product);
 
-        ordersMap.get(orderId).getItems().add(new Item(box, boxesCount));
+        ordersMap.get(orderId).getItems().add(new Item(box, count));
 
         return ordersMap.get(orderId);
     };
@@ -59,11 +57,13 @@ public class OrderDAO implements CrudDAO<Order>
     @Override
     public void create(Order model)
     {
+        int id = findId();
+
         for (Item item : model.getItems())
         {
-            String query = "INSERT INTO warehouse.order (address, boxes_count, box_id, order_id) VALUES(?, ?, ?, ?)";
-            Object[] args = {model.getAddress(), item.getCount(), item.getBox().getId(), findId()};
-            int[] types = {Types.VARCHAR, Types.INTEGER, Types.INTEGER, Types.INTEGER};
+            String query = "INSERT INTO warehouse.order (address_id, boxes_count, box_id, order_id) VALUES(?, ?, ?, ?)";
+            Object[] args = {model.getAddress().getId(), item.getCount(), item.getBox().getId(), id};
+            int[] types = {Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER};
             template.update(query, args, types);
         }
     }
@@ -86,7 +86,7 @@ public class OrderDAO implements CrudDAO<Order>
     @Override
     public List<Order> retrieveAll()
     {
-        String query = "SELECT box.id AS boxId, product.id AS productId, * FROM warehouse.order LEFT JOIN warehouse.box ON warehouse.order.box_id = box.id LEFT JOIN warehouse.product ON box.product_id = product.id";
+        String query = "SELECT warehouse.address.id AS addressId, box.id AS boxId, product.id AS productId, * FROM warehouse.order LEFT JOIN warehouse.address ON warehouse.order.address_id = address.id LEFT JOIN warehouse.box ON warehouse.order.box_id = box.id LEFT JOIN warehouse.product ON box.product_id = product.id  ORDER BY date";
         template.query(query, orderRowMapper);
         List<Order> orders = new ArrayList<>(ordersMap.values());
 

@@ -5,7 +5,7 @@ import java.util.List;
 public class Place
 {
     private Integer id;
-    private String address;
+    private String position;
     private Integer capacity;
     private Integer fullness;
     private List<Box> boxes;
@@ -15,18 +15,18 @@ public class Place
         
     }
 
-    public Place(String address, Integer capacity, Integer fullness, List<Box> boxes)
+    public Place(String position, Integer capacity, Integer fullness, List<Box> boxes)
     {
-        this.address = address;
+        this.position = position;
         this.capacity = capacity;
         this.fullness = fullness;
         this.boxes = boxes;
     }
 
-    public Place(Integer id, String address, Integer capacity, Integer fullness, List<Box> boxes)
+    public Place(Integer id, String position, Integer capacity, Integer fullness, List<Box> boxes)
     {
         this.id = id;
-        this.address = address;
+        this.position = position;
         this.capacity = capacity;
         this.fullness = fullness;
         this.boxes = boxes;
@@ -42,14 +42,14 @@ public class Place
         this.id = id;
     }
 
-    public String getAddress()
+    public String getPosition()
     {
-        return address;
+        return position;
     }
 
-    public void setAddress(String address)
+    public void setPosition(String position)
     {
-        this.address = address;
+        this.position = position;
     }
 
     public Integer getCapacity()

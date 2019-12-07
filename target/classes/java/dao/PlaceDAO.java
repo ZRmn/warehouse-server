@@ -64,7 +64,7 @@ public class PlaceDAO implements CrudDAO<Place>
     public void create(Place model)
     {
         String query = "INSERT INTO warehouse.place (id, position, capacity, fullness) VALUES(?, ?, ?, ?)";
-        Object[] args = {findId(), model.getAddress(), model.getCapacity(), model.getFullness()};
+        Object[] args = {findId(), model.getPosition(), model.getCapacity(), model.getFullness()};
         int[] types = {Types.INTEGER, Types.VARCHAR, Types.INTEGER, Types.INTEGER};
 
         template.update(query, args, types);
@@ -102,7 +102,7 @@ public class PlaceDAO implements CrudDAO<Place>
     public void update(Place model)
     {
         String query = "UPDATE warehouse.place SET position = ?, capacity = ?, fullness = ? WHERE id = ?";
-        Object[] args = {model.getAddress(), model.getCapacity(), model.getFullness(), model.getId()};
+        Object[] args = {model.getPosition(), model.getCapacity(), model.getFullness(), model.getId()};
         int[] types = {Types.VARCHAR, Types.INTEGER, Types.INTEGER, Types.INTEGER};
 
         template.update(query, args, types);
@@ -122,6 +122,27 @@ public class PlaceDAO implements CrudDAO<Place>
     public void deleteAll()
     {
 
+    }
+
+    private RowMapper<Place> simplePlaceRowMapper = (resultSet, i) ->
+    {
+        Integer id = resultSet.getInt("id");
+        String pos = resultSet.getString("position");
+        Integer capacity = resultSet.getInt("capacity");
+        Integer fullness = resultSet.getInt("fullness");
+
+        return new Place(id, pos, capacity, fullness, new ArrayList<>());
+    };
+
+    public Place getPlaceByPosition(String position)
+    {
+        String query = "SELECT * FROM warehouse.place WHERE position = ?";
+        Object[] args = {position};
+        int[] types = {Types.VARCHAR};
+
+        List<Place> places = template.query(query, args, types, simplePlaceRowMapper);
+
+        return places.isEmpty() ? null : places.get(0);
     }
 
     private Integer findId()

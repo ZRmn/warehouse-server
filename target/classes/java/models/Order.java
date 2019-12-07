@@ -5,7 +5,7 @@ import java.util.List;
 public class Order
 {
     private Integer id;
-    private String address;
+    private Address address;
     private List<Item> items;
 
     public Order()
@@ -13,13 +13,13 @@ public class Order
 
     }
 
-    public Order(String address, List<Item> items)
+    public Order(Address address, List<Item> items)
     {
         this.address = address;
         this.items = items;
     }
 
-    public Order(Integer id, String address, List<Item> items)
+    public Order(Integer id, Address address, List<Item> items)
     {
         this.id = id;
         this.address = address;
@@ -36,12 +36,12 @@ public class Order
         this.id = id;
     }
 
-    public String getAddress()
+    public Address getAddress()
     {
         return address;
     }
 
-    public void setAddress(String address)
+    public void setAddress(Address address)
     {
         this.address = address;
     }

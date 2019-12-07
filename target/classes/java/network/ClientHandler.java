@@ -1,8 +1,7 @@
 package network;
 
 import javafx.application.Platform;
-import models.Product;
-import models.User;
+import models.*;
 import org.springframework.dao.DataAccessException;
 import utils.DTO;
 import utils.JsonParser;
@@ -12,6 +11,7 @@ import java.io.DataOutputStream;
 import java.net.Socket;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class ClientHandler implements Runnable
 {
@@ -240,6 +240,343 @@ public class ClientHandler implements Runnable
                     case "get-products":
                     {
                         response = JsonParser.jsonFromObject(dto.getProductDAO().retrieveAll().toArray(new Product[0]));
+
+                        out.writeUTF(response);
+                        out.flush();
+
+                        break;
+                    }
+
+                    case "add-box":
+                    {
+                        if (args != null)
+                        {
+                            Box box = JsonParser.objectFromJson(args[0], Box.class);
+
+                            try
+                            {
+                                dto.getBoxDAO().create(box);
+                                response = "200";
+                            }
+                            catch (DataAccessException e)
+                            {
+                                response = "400";
+                            }
+
+                            out.writeUTF(response);
+                            out.flush();
+                        }
+
+                        break;
+                    }
+
+                    case "edit-box":
+                    {
+                        if (args != null)
+                        {
+                            Box box = JsonParser.objectFromJson(args[0], Box.class);
+
+                            try
+                            {
+                                dto.getBoxDAO().update(box);
+                                response = "200";
+                            }
+                            catch (DataAccessException e)
+                            {
+                                response = "400";
+                            }
+
+                            out.writeUTF(response);
+                            out.flush();
+                        }
+
+                        break;
+                    }
+
+                    case "delete-box":
+                    {
+                        if (args != null)
+                        {
+                            Box box = JsonParser.objectFromJson(args[0], Box.class);
+
+                            dto.getBoxDAO().delete(box);
+                        }
+
+                        break;
+                    }
+
+                    case "get-boxes":
+                    {
+                        response = JsonParser.jsonFromObject(dto.getBoxDAO().retrieveAll().toArray(new Box[0]));
+
+                        out.writeUTF(response);
+                        out.flush();
+
+                        break;
+                    }
+
+                    case "add-order":
+                    {
+                        if (args != null)
+                        {
+                            Order order = JsonParser.objectFromJson(args[0], Order.class);
+
+                            try
+                            {
+                                dto.getOrderDAO().create(order);
+                                response = "200";
+                            }
+                            catch (DataAccessException e)
+                            {
+                                response = "400";
+                            }
+
+                            out.writeUTF(response);
+                            out.flush();
+                        }
+
+                        break;
+                    }
+
+                    case "edit-order":
+                    {
+                        if (args != null)
+                        {
+                            Order order = JsonParser.objectFromJson(args[0], Order.class);
+
+                            try
+                            {
+                                dto.getOrderDAO().update(order);
+                                response = "200";
+                            }
+                            catch (DataAccessException e)
+                            {
+                                response = "400";
+                            }
+
+                            out.writeUTF(response);
+                            out.flush();
+                        }
+
+                        break;
+                    }
+
+                    case "delete-order":
+                    {
+                        if (args != null)
+                        {
+                            Order order = JsonParser.objectFromJson(args[0], Order.class);
+
+                            dto.getOrderDAO().delete(order);
+                        }
+
+                        break;
+                    }
+
+                    case "get-orders":
+                    {
+                        response = JsonParser.jsonFromObject(dto.getOrderDAO().retrieveAll().toArray(new Order[0]));
+
+                        out.writeUTF(response);
+                        out.flush();
+
+                        break;
+                    }
+
+                    case "add-address":
+                    {
+                        if (args != null)
+                        {
+                            Address address = JsonParser.objectFromJson(args[0], Address.class);
+
+                            try
+                            {
+                                dto.getAddressDAO().create(address);
+                                response = "200";
+                            }
+                            catch (DataAccessException e)
+                            {
+                                response = "400";
+                            }
+
+                            out.writeUTF(response);
+                            out.flush();
+                        }
+
+                        break;
+                    }
+
+                    case "edit-address":
+                    {
+                        if (args != null)
+                        {
+                            Address address = JsonParser.objectFromJson(args[0], Address.class);
+
+                            try
+                            {
+                                dto.getAddressDAO().update(address);
+                                response = "200";
+                            }
+                            catch (DataAccessException e)
+                            {
+                                response = "400";
+                            }
+
+                            out.writeUTF(response);
+                            out.flush();
+                        }
+
+                        break;
+                    }
+
+                    case "delete-address":
+                    {
+                        if (args != null)
+                        {
+                            Address address = JsonParser.objectFromJson(args[0], Address.class);
+
+                            dto.getAddressDAO().delete(address);
+                        }
+
+                        break;
+                    }
+
+                    case "get-addresses":
+                    {
+                        response = JsonParser.jsonFromObject(dto.getAddressDAO().retrieveAll().toArray(new Address[0]));
+
+                        out.writeUTF(response);
+                        out.flush();
+
+                        break;
+                    }
+
+                    case "edit-warehouse-map":
+                    {
+                        if (args != null)
+                        {
+                            WarehouseMap warehouseMap = JsonParser.objectFromJson(args[0], WarehouseMap.class);
+
+                            try
+                            {
+                                dto.getWarehouseMapDAO().deleteAll();
+                                dto.getWarehouseMapDAO().create(warehouseMap);
+                                response = "200";
+                            }
+                            catch (DataAccessException e)
+                            {
+                                response = "400";
+                            }
+
+                            out.writeUTF(response);
+                            out.flush();
+                        }
+
+                        break;
+                    }
+
+                    case "get-warehouse-map":
+                    {
+                        List<WarehouseMap> warehouseMaps = dto.getWarehouseMapDAO().retrieveAll();
+
+                        if(!warehouseMaps.isEmpty())
+                        {
+                            response = JsonParser.jsonFromObject(warehouseMaps.get(0));
+                        }
+                        else
+                        {
+                            response = "400";
+                        }
+
+                        out.writeUTF(response);
+                        out.flush();
+
+                        break;
+                    }
+
+                    case "get-place":
+                    {
+                        if (args != null)
+                        {
+                            Place place = dto.getPlaceDAO().getPlaceByPosition(args[0]);
+
+                            if(place != null)
+                            {
+                                response = JsonParser.jsonFromObject(place);
+                            }
+                            else
+                            {
+                                response = "400";
+                            }
+
+                            out.writeUTF(response);
+                            out.flush();
+                        }
+
+                        break;
+                    }
+
+                    case "add-place":
+                    {
+                        if (args != null)
+                        {
+                            Place place = JsonParser.objectFromJson(args[0], Place.class);
+
+                            try
+                            {
+                                dto.getPlaceDAO().create(place);
+                                response = "200";
+                            }
+                            catch (DataAccessException e)
+                            {
+                                response = "400";
+                            }
+
+                            out.writeUTF(response);
+                            out.flush();
+                        }
+
+                        break;
+                    }
+
+                    case "edit-place":
+                    {
+                        if (args != null)
+                        {
+                            Place place = JsonParser.objectFromJson(args[0], Place.class);
+
+                            try
+                            {
+                                dto.getPlaceDAO().update(place);
+                                response = "200";
+                            }
+                            catch (DataAccessException e)
+                            {
+                                response = "400";
+                            }
+
+                            out.writeUTF(response);
+                            out.flush();
+                        }
+
+                        break;
+                    }
+
+                    case "delete-place":
+                    {
+                        if (args != null)
+                        {
+                            Place place = JsonParser.objectFromJson(args[0], Place.class);
+
+                            dto.getPlaceDAO().delete(place);
+                        }
+
+                        break;
+                    }
+
+                    case "get-places":
+                    {
+                        response = JsonParser.jsonFromObject(dto.getPlaceDAO().retrieveAll().toArray(new Place[0]));
 
                         out.writeUTF(response);
                         out.flush();
