@@ -48,20 +48,20 @@ public class ClientHandler implements Runnable
                 temp = request.split("\\?");
                 command = temp[0];
 
-                args = temp.length > 1 ? temp[1].split("&"): null;
+                args = temp.length > 1 ? temp[1].split("&") : null;
 
                 switch (command)
                 {
                     case "connect":
                     {
-                        if(args != null)
+                        if (args != null)
                         {
                             client.setInfo(args[0]);
 
                             System.out.println("Client " + args[0] + " connected on " + ZonedDateTime.now().format(
                                     DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")));
 
-                            Platform.runLater(() ->dto.getClients().add(client));
+                            Platform.runLater(() -> dto.getClients().add(client));
                         }
 
                         break;
@@ -69,10 +69,11 @@ public class ClientHandler implements Runnable
 
                     case "disconnect":
                     {
-                        System.out.println("Client " + client.getInfo() + " disconnected on " + ZonedDateTime.now().format(
-                                DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")));
+                        System.out.println(
+                                "Client " + client.getInfo() + " disconnected on " + ZonedDateTime.now().format(
+                                        DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")));
 
-                        Platform.runLater(() ->dto.getClients().remove(client));
+                        Platform.runLater(() -> dto.getClients().remove(client));
 
                         client.disconnect();
 
@@ -81,7 +82,7 @@ public class ClientHandler implements Runnable
 
                     case "has-admin":
                     {
-                        if(dto.getUserDAO().hasAdmin())
+                        if (dto.getUserDAO().hasAdmin())
                         {
                             response = "200";
                         }
@@ -479,7 +480,7 @@ public class ClientHandler implements Runnable
                     {
                         List<WarehouseMap> warehouseMaps = dto.getWarehouseMapDAO().retrieveAll();
 
-                        if(!warehouseMaps.isEmpty())
+                        if (!warehouseMaps.isEmpty())
                         {
                             response = JsonParser.jsonFromObject(warehouseMaps.get(0));
                         }
@@ -500,7 +501,7 @@ public class ClientHandler implements Runnable
                         {
                             Place place = dto.getPlaceDAO().getPlaceByPosition(args[0]);
 
-                            if(place != null)
+                            if (place != null)
                             {
                                 response = JsonParser.jsonFromObject(place);
                             }
@@ -534,6 +535,17 @@ public class ClientHandler implements Runnable
 
                             out.writeUTF(response);
                             out.flush();
+                        }
+
+                        break;
+                    }
+
+                    case "set-place-capacity":
+                    {
+                        if (args != null)
+                        {
+                            Integer capacity = JsonParser.objectFromJson(args[0], Integer.class);
+                            dto.getPlaceDAO().setCapacity(capacity);
                         }
 
                         break;

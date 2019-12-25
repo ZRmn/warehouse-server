@@ -8,28 +8,28 @@ public class Place
     private String position;
     private Integer capacity;
     private Integer fullness;
-    private List<Box> boxes;
+    private List<Pallet> pallets;
 
     public Place()
     {
         
     }
 
-    public Place(String position, Integer capacity, Integer fullness, List<Box> boxes)
+    public Place(String position, Integer capacity, Integer fullness, List<Pallet> pallets)
     {
         this.position = position;
         this.capacity = capacity;
         this.fullness = fullness;
-        this.boxes = boxes;
+        this.pallets = pallets;
     }
 
-    public Place(Integer id, String position, Integer capacity, Integer fullness, List<Box> boxes)
+    public Place(Integer id, String position, Integer capacity, Integer fullness, List<Pallet> pallets)
     {
         this.id = id;
         this.position = position;
         this.capacity = capacity;
         this.fullness = fullness;
-        this.boxes = boxes;
+        this.pallets = pallets;
     }
 
     public Integer getId()
@@ -72,13 +72,13 @@ public class Place
         this.fullness = fullness;
     }
 
-    public List<Box> getBoxes()
+    public List<Pallet> getPallets()
     {
-        return boxes;
+        return pallets;
     }
 
-    public void setBoxes(List<Box> boxes)
+    public void setPallets(List<Pallet> pallets)
     {
-        this.boxes = boxes;
+        this.pallets = pallets;
     }
 }
